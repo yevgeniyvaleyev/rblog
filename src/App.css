@@ -1,0 +1,9 @@
+.categories-list {
+  float: left;
+  display: block;
+}
+.categories-list::after {
+  clear: both;
+  display: block;
+  content: '';
+}
