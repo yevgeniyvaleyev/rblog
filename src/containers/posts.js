@@ -1,25 +1,33 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
-import { CategoriesList } from '../components/categories-list';
-import { fetchCategories } from '../actions';
-import { getCategories } from '../reducers';
-import { Redirect } from 'react-router-dom';
+import { fetchPosts } from '../actions';
+import { getPosts } from '../reducers';
+import { PostsList } from '../components/posts-list';
 
 class Posts extends Component {
 
-  componentDidMount () {
-    this.props.fetchCategories();
+  state = {
+    categoryName: ''
+  };
+
+  componentWillReceiveProps (props) {
+    const { categoryName } = props.match.params;
+    
+    if (categoryName !== this.state.categoryName) {
+      this.props.fetchPosts(categoryName);
+      this.setState({
+        categoryName
+      });
+    }
   }
 
   render() {
-    const { categories } = this.props;
-    return categories && categories.length > 0 ? (
-      <CategoriesList 
-        categories={categories} />
+    const { posts } = this.props;
+    return posts && posts.length > 0 ? (
+      <PostsList posts={posts} />
     ) : (
-      <em>Loading...</em>
+      <em>Loading posts...</em>
     )
   }
 }
@@ -28,12 +36,12 @@ Posts.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  posts: getPosts()
+  posts: getPosts(state)
 }); 
 
-Posts = withRouter(connect(
+Posts = connect(
   mapStateToProps,
   { fetchPosts }
-)(Posts));
+)(Posts);
 
 export default Posts;

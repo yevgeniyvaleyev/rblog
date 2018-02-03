@@ -1,42 +1,44 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import { Paper } from 'material-ui';
+import {Row, Col} from 'react-flexbox-grid'
 import { HeaderToolbar } from './components/header-toolbar';
 import Categories from './containers/categories';
 import './App.css';
-import { Category } from './components/category';
+import Posts from './containers/posts';
+import Post from './containers/post';
 
 const style = {
-  height: '100%',
-  width: '80%',
-  minWidth: '550px',
-  margin: '0 auto',
+  marginBottom: '20px',
 };
 
 export default class App extends Component {
   render() {
     return (
-      <div>
-        <Paper style={style} zDepth={1}>
-          <HeaderToolbar />
-        </Paper>
-        <Paper>
-          <table>
-            <tr>
-              <td>
+      <Row>
+        <Col lg={12}>
+          <Row>
+            <Col lg={12}>
+              <Paper style={style} zDepth={1}>
+                <HeaderToolbar />
+              </Paper>
+            </Col>
+          </Row>
+          <Row>
+            <Col lg={3}>
               <Categories />
-              </td>
-              <td>
+            </Col>
+            <Col lg={9}>
               <Switch>
-                <Route path='/category/:name' component={Posts}/>
-                <Redirect from='/' exact to='/category/react'/>
+                <Route path='/category/:categoryName' component={Posts}/>
+                <Route path='/' exact component={Posts}/>
+                <Route path='/post/:postId' component={Post}/>
               </Switch>
-              </td>
-            </tr>
-          </table>
-          </Paper>
-      </div>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
     );
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Toolbar, ToolbarGroup, RaisedButton, ToolbarTitle } from 'material-ui';
+import { Toolbar, ToolbarGroup, RaisedButton } from 'material-ui';
 
 export const HeaderToolbar = () => (
   <Toolbar>

@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { CategoriesList } from '../components/categories-list';
 import { fetchCategories } from '../actions';
 import { getCategories } from '../reducers';
-import { Redirect } from 'react-router-dom';
 
 class Categories extends Component {
 
@@ -18,7 +17,7 @@ class Categories extends Component {
       <CategoriesList 
         categories={categories} />
     ) : (
-      <em>Loading...</em>
+      <em>Loading categories...</em>
     )
   }
 }
