@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { fetchPosts } from '../actions';
 import { getPosts } from '../reducers';
 import { PostsList } from '../components/posts-list';
@@ -13,35 +13,40 @@ class Posts extends Component {
 
   componentWillReceiveProps (props) {
     const { categoryName } = props.match.params;
-    
+
     if (categoryName !== this.state.categoryName) {
-      this.props.fetchPosts(categoryName);
-      this.setState({
-        categoryName
-      });
+      this.fetchPosts(categoryName);
     }
+  }
+
+  componentDidMount () {
+    this.fetchPosts(this.props.match.params.categoryName);
+  }
+
+  fetchPosts (categoryName) {
+    this.props.fetchPosts(categoryName);
+    this.setState({
+      categoryName
+    });
   }
 
   render() {
     const { posts } = this.props;
-    return posts && posts.length > 0 ? (
+    return posts ? (
       <PostsList posts={posts} />
     ) : (
       <em>Loading posts...</em>
     )
   }
 }
-Posts.propTypes = {
-  
-};
 
 const mapStateToProps = (state) => ({
   posts: getPosts(state)
 }); 
 
-Posts = connect(
+Posts = withRouter(connect(
   mapStateToProps,
   { fetchPosts }
-)(Posts);
+)(Posts));
 
 export default Posts;

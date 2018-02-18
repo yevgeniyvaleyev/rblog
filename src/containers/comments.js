@@ -17,13 +17,14 @@ class Comments extends Component {
     const { comments } = this.props;
     return (
       <CommentsList 
+        postId={this.props.postId}
         deleteComment={this.props.deleteComment}
         comments={comments || []} />
     )
   }
 }
 Comments.propTypes = {
-  
+  postId: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => ({

@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom';
 import { Paper } from 'material-ui';
-import {Row, Col} from 'react-flexbox-grid'
+import { Row, Col } from 'react-flexbox-grid'
 import { HeaderToolbar } from './components/header-toolbar';
 import Categories from './containers/categories';
 import './App.css';
 import Posts from './containers/posts';
 import Post from './containers/post';
+import ManagePost from './containers/manage-post';
+import ManageComment from './containers/manage-comment';
 
 const style = {
   marginBottom: '20px',
@@ -26,14 +28,18 @@ export default class App extends Component {
             </Col>
           </Row>
           <Row>
-            <Col lg={3}>
+            <Col md={3} sm={2}>
               <Categories />
             </Col>
-            <Col lg={9}>
+            <Col md={9} sm={10}>
               <Switch>
-                <Route path='/category/:categoryName' component={Posts}/>
-                <Route path='/' exact component={Posts}/>
-                <Route path='/post/:postId' component={Post}/>
+                <Route path='/' exact component={Posts} />
+                <Route path='/category/:categoryName' component={Posts} />
+                <Route path='/post/add' component={ManagePost} />
+                <Route path='/post/edit/:postId' component={ManagePost} />
+                <Route path='/post/:postId' exact component={Post} />
+                <Route path='/post/:postId/comment/add' component={ManageComment} />
+                <Route path='/post/:postId/comment/edit/:commentId' component={ManageComment} />
               </Switch>
             </Col>
           </Row>

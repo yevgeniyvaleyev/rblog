@@ -1,54 +1,32 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import {Row, Col} from 'react-flexbox-grid'
-import { Card, Dialog, CardHeader, CardText, CardActions, RaisedButton, FlatButton } from 'material-ui';
+import {Row, Col} from 'react-flexbox-grid';
+import { Link } from 'react-router-dom';
+import { Card, CardHeader, CardText, CardActions, RaisedButton, FlatButton } from 'material-ui';
 import Comments from '../containers/comments';
 import { ScoreAvatar } from './score-avatar';
-import { deletePost } from '../actions/index';
+import { ConfirmDialog } from './confirm-dialog';
 
 export class PostDetails extends Component {
   
   state = {
-    removeDialog: {
-      open: false
-    }
+    activateDeleteConfirm: false
   };
 
   requestDeleteConfirmation = () => {
     this.setState({
-      removeDialog: {open: true}
+      activateDeleteConfirm: true
     });
   };
 
-  removePost = (id) => {
+  removePost = () => 
     this.props
-      .deletePost(id)
-      .then(this.hideDialog)
+      .deletePost(this.props.post.id)
       .then(this.props.goBack)
-  }
-
-  hideDialog = () => {
-    this.setState({
-      removeDialog: {open: false}
-    });
-  };
 
   render () {
     const { post } = this.props;
-    const removeDialogActions = [
-      <FlatButton
-        label="Cancel"
-        primary={true}
-        onClick={this.hideDialog.bind(this)}
-      />,
-      <FlatButton
-        label="Delete"
-        primary={true}
-        keyboardFocused={true}
-        onClick={this.removePost.bind(this, post.id)}
-      />
-    ];
 
     return (
       <Card>
@@ -64,11 +42,15 @@ export class PostDetails extends Component {
         <CardActions>
           <Row>
             <Col lg={9}>
-              <RaisedButton primary={true} label="Add comment" />
+              <Link to={`/post/${post.id}/comment/add`}>
+                <RaisedButton primary={true} label="Add comment" />
+              </Link>
             </Col>
             <Col lg={3}>
               <FlatButton label="Delete" onClick={this.requestDeleteConfirmation} />
-              <FlatButton label="Edit" />
+              <Link to={`/post/edit/${post.id}`}>
+                <FlatButton label="Edit" />
+              </Link>
             </Col>
           </Row>
         </CardActions>
@@ -76,14 +58,12 @@ export class PostDetails extends Component {
           <h4>Comments:</h4>
         </CardText>
         <Comments postId={post.id} />
-        <Dialog
-            actions={removeDialogActions}
-            modal={false}
-            open={this.state.removeDialog.open}
-            onRequestClose={this.hideDialog}
-          >
-            Delete post?
-          </Dialog>
+        
+        <ConfirmDialog 
+            activate={this.state.activateDeleteConfirm}
+            message="Delete post?"
+            onConfirm={this.removePost}
+        />
       </Card>
     )
   }

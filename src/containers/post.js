@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getPost } from '../reducers';
 import { withRouter } from 'react-router';
@@ -16,7 +15,6 @@ class Post extends Component {
 
   render() {
     const { post, deletePost } = this.props;
-    debugger
     return post ? (
       <PostDetails 
         deletePost={deletePost}
@@ -27,9 +25,6 @@ class Post extends Component {
     )
   }
 }
-Post.propTypes = {
-  
-};
 
 const mapStateToProps = (state, props) => ({
   post: getPost(state, props.match.params.postId)

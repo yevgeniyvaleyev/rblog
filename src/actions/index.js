@@ -3,8 +3,13 @@ import {
   FETCH_POSTS,
   FETCH_POST,
   FETCH_COMMENTS,
+  FETCH_COMMENT,
   DETELE_COMMENT,
-  DETELE_POST
+  ADDED_COMMENT,
+  UPDATED_COMMENT,
+  DETELE_POST,
+  ADDED_POST,
+  UPDATED_POST
 } from './actions';
 
 export const onCategoriesFetched = (data) => ({
@@ -14,6 +19,21 @@ export const onCategoriesFetched = (data) => ({
 
 export const onPostsFetched = (data) => ({
   type: FETCH_POSTS,
+  payload: data
+});
+
+export const onPostDeleted = (data) => ({
+  type: DETELE_POST,
+  payload: data
+});
+
+export const onPostAdded = (data) => ({
+  type: ADDED_POST,
+  payload: data
+});
+
+export const onPostUpdated = (data) => ({
+  type: UPDATED_POST,
   payload: data
 });
 
@@ -27,26 +47,44 @@ export const onCommentsFetched = (data) => ({
   payload: data
 });
 
+export const onCommentFetched = (data) => ({
+  type: FETCH_COMMENT,
+  payload: data
+});
+
 export const onCommentDeleted = (data) => ({
   type: DETELE_COMMENT,
   payload: data
 });
 
-export const onPostDeleted = (data) => ({
-  type: DETELE_POST,
+export const onCommentAdded = (data) => ({
+  type: ADDED_COMMENT,
+  payload: data
+});
+
+export const onCommentUpdated = (data) => ({
+  type: UPDATED_COMMENT,
   payload: data
 });
 
 const api = 'http://localhost:3001';
 
 // CONFIG maybe ?
-const request = (url, method = 'get') => 
-  fetch(`${api}${url}`, 
-    { 
-      headers: { 'Authorization': 'whatever-you-want' },
-      method
-    })
-  .then((response) => response.json());
+const request = (url, method = 'get', data = null) => {
+  const headers = {
+    'Authorization': 'whatever-you-want' 
+  }
+  const config = {
+    method
+  };
+  if (data) {
+    headers['Content-Type'] = 'application/json';
+    config.body = JSON.stringify({ ...data });
+  }
+  config.headers = headers
+  return fetch(`${api}${url}`, config)
+  .then((response) => response.json())
+}
 
 export const fetchCategories = () => (dispatch, getState) => {
   request('/categories').then((data) => {
@@ -81,8 +119,33 @@ export const deleteComment = (commentId) => (dispatch, getState) => {
 
 export const deletePost = (postId) => (dispatch, getState) => {
   return request(`/posts/${postId}`, 'delete').then((post) => {
-    debugger
     dispatch(onPostDeleted(post));
   });
 }
+
+export const addPost = (postData) => (dispatch, getState) =>
+  request(`/posts`, 'post', postData).then((post) => {
+    dispatch(onPostAdded(post));
+  })
+
+export const updatePost = (postData, id) => (dispatch, getState) =>
+  request(`/posts/${id}`, 'put', postData).then((post) => {
+    dispatch(onPostUpdated(post));
+  })
+
+export const addComment = (commentData) => (dispatch, getState) =>
+  request(`/comments`, 'post', commentData).then((comment) => {
+    dispatch(onCommentAdded(comment));
+  })
+
+export const updateComment = (commentData, id) => (dispatch, getState) =>
+  request(`/comments/${id}`, 'put', commentData).then((comment) => {
+    dispatch(onCommentUpdated(comment));
+  })
+
+export const fetchComment = (commentId = '') => (dispatch, getState) => {
+    request(`/comments/${commentId}`).then((comment) => {
+      dispatch(onCommentFetched(comment));
+    });
+  }
 
