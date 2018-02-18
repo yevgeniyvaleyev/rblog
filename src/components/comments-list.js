@@ -1,54 +1,37 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Dialog, CardHeader, CardText, CardActions, FlatButton } from 'material-ui';
+import { Card, CardHeader, CardText, CardActions, FlatButton } from 'material-ui';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 import { ScoreAvatar } from './score-avatar';
 import { ConfirmDialog } from './confirm-dialog';
 
 export class CommentsList extends Component {
 
   state = {
-    removeDialog: {
-      open: false
-    },
-    selectedCommentId: null
+    selectedCommentId: null,
+    activateDeleteConfirm: false
   };
 
   requestDeleteConfirmation = (id) => {
     this.setState({
-      removeDialog: {open: true},
-      selectedCommentId: id
+      selectedCommentId: id,
+      activateDeleteConfirm: true
     });
   };
 
-  removeSelectedComment = () => {
-    this.props
-      .deleteComment(this.state.selectedCommentId)
-      .then(this.hideDialog)
-  }
+  removeSelectedComment = () =>
+    this.props.deleteComment(this.state.selectedCommentId);
 
-  hideDialog = () => {
+  deselectComment = () => {
     this.setState({
-      removeDialog: {open: false},
-      selectedCommentId: null
+      selectedCommentId: null,
+      activateDeleteConfirm: false
     });
   };
 
   render () {
     const { comments } = this.props;
-    const removeDialogActions = [
-      <FlatButton
-        label="Cancel"
-        primary={true}
-        onClick={this.hideDialog.bind(this)}
-      />,
-      <FlatButton
-        label="Delete"
-        primary={true}
-        keyboardFocused={true}
-        onClick={this.removeSelectedComment.bind(this)}
-      />
-    ];
 
     if (comments.length === 0) {
       return (
@@ -69,19 +52,19 @@ export class CommentsList extends Component {
               />
               <CardText>{comment.body}</CardText>
               <CardActions>
-                <FlatButton label="Edit" />
+                <Link to={`/post/${this.props.postId}/comment/edit/${comment.id}`}>
+                  <FlatButton label="Edit" />
+                </Link>
                 <FlatButton label="Delete" onClick={this.requestDeleteConfirmation.bind(null, comment.id)} />
               </CardActions>
             </Card>
           ))}
-          <Dialog
-            actions={removeDialogActions}
-            modal={false}
-            open={this.state.removeDialog.open}
-            onRequestClose={this.hideDialog}
-          >
-            Delete comment?
-          </Dialog>
+          <ConfirmDialog 
+            activate={this.state.activateDeleteConfirm}
+            message="Delete comment?"
+            onConfirm={this.removeSelectedComment}
+            onCancel={this.deselectComment}
+          />
         </div>
     )
   }
@@ -89,5 +72,6 @@ export class CommentsList extends Component {
 
 CommentsList.propTypes = {
   comments: PropTypes.array.isRequired,
-  deleteComment: PropTypes.func.isRequired
+  deleteComment: PropTypes.func.isRequired,
+  postId: PropTypes.string.isRequired
 };

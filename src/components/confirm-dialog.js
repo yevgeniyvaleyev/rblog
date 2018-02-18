@@ -13,20 +13,21 @@ export class ConfirmDialog extends Component {
   };
 
   confirm = () => {
-    this.props
-      .onConfirm()
-      .then(this.hideDialog)
+    this.hideDialog();
+    this.props.onConfirm()
   }
 
   componentWillReceiveProps ({activate}) {
-    if (activate) {
+    if (activate && !this.state.open) {
       this.activate();
     }
   }
 
   hideDialog = () => {
     this.setState({open: false});
-    this.props.onCancel();
+    if (this.props.onCancel) {
+      this.props.onCancel();
+    }
   };
 
   render () {
@@ -61,5 +62,5 @@ ConfirmDialog.propTypes = {
   activate: PropTypes.bool.isRequired,
   message: PropTypes.string.isRequired,
   onConfirm: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired
+  onCancel: PropTypes.func
 };

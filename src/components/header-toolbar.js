@@ -5,7 +5,7 @@ import { Toolbar, ToolbarGroup, RaisedButton } from 'material-ui';
 export const HeaderToolbar = () => (
   <Toolbar>
     <ToolbarGroup>
-      <Link to="/add-post">
+      <Link to="/post/add">
         <RaisedButton label="Add post" primary />
       </Link>
     </ToolbarGroup>

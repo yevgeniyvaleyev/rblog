@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
-import { DropDownMenu, MenuItem, List, ListItem } from 'material-ui';
+import { SelectField, MenuItem, CardText, Card, List, ListItem } from 'material-ui';
 import { byTimestamp, byVotes } from '../utils/sorters';
 
 const sorting = {
@@ -35,30 +35,32 @@ export class PostsList extends Component {
     
     if (posts.length === 0) {
       return (
-        <div>Empty list</div>
+        <Card>
+          <CardText>yet no posts...</CardText>
+        </Card>
       )
     }
     
     return (
       <div>
-        <DropDownMenu value={this.state.sortBy} onChange={this.handleSort}>
-          <MenuItem value={1} primaryText="Votes" />
-          <MenuItem value={2} primaryText="Time" />
-          <MenuItem value={3} primaryText="None" />
-        </DropDownMenu>
+        <SelectField 
+          value={this.state.sortBy} 
+          floatingLabelText="Sort by"
+          onChange={this.handleSort}>
+            <MenuItem value={1} primaryText="Votes" />
+            <MenuItem value={2} primaryText="Time" />
+            <MenuItem value={3} primaryText="None" />
+        </SelectField>
 
         <List className="posts-list">
           {this.sortPosts(posts).map((post) => (
+            <NavLink to={{ pathname: `/post/${post.id}` }}>
               <ListItem 
                 primaryText={post.title}
-                secondaryText={
-                  <NavLink to={{ pathname: `/post/${post.id}` }}>
-                    Read more
-                  </NavLink>
-                }
                 key={post.id}>
               </ListItem>
-            ))}
+            </NavLink>
+          ))}
         </List>
       </div>
     )
