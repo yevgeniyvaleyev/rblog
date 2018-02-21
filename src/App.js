@@ -9,11 +9,7 @@ import './App.css';
 import Posts from './containers/posts';
 import Post from './containers/post';
 import ManagePost from './containers/manage-post';
-import ManageComment from './containers/manage-comment';
-
-const style = {
-  marginBottom: '20px',
-};
+import NoMatch from './components/no-match';
 
 export default class App extends Component {
   render() {
@@ -22,7 +18,7 @@ export default class App extends Component {
         <Col lg={12}>
           <Row>
             <Col lg={12}>
-              <Paper style={style} zDepth={1}>
+              <Paper className="header-container" zDepth={1}>
                 <HeaderToolbar />
               </Paper>
             </Col>
@@ -34,12 +30,11 @@ export default class App extends Component {
             <Col md={9} sm={10}>
               <Switch>
                 <Route path='/' exact component={Posts} />
-                <Route path='/category/:categoryName' component={Posts} />
-                <Route path='/post/add' component={ManagePost} />
-                <Route path='/post/edit/:postId' component={ManagePost} />
-                <Route path='/post/:postId' exact component={Post} />
-                <Route path='/post/:postId/comment/add' component={ManageComment} />
-                <Route path='/post/:postId/comment/edit/:commentId' component={ManageComment} />
+                <Route path='/:categoryName' exact component={Posts} />
+                <Route path='/:categoryName/:postId' component={Post} />
+                <Route path='/post/add' exact component={ManagePost} />
+                <Route path='/post/edit/:postId' exact component={ManagePost} />
+                <Route component={NoMatch} />
               </Switch>
             </Col>
           </Row>

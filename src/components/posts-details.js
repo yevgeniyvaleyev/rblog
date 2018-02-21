@@ -26,7 +26,7 @@ export class PostDetails extends Component {
       .then(this.props.goBack)
 
   render () {
-    const { post } = this.props;
+    const { post, match } = this.props;
 
     return (
       <Card>
@@ -41,12 +41,12 @@ export class PostDetails extends Component {
         </CardText>
         <CardActions>
           <Row>
-            <Col lg={9}>
-              <Link to={`/post/${post.id}/comment/add`}>
+            <Col sm={6} lg={8}>
+              <Link to={`/${post.category}/${post.id}/comment`}>
                 <RaisedButton primary={true} label="Add comment" />
               </Link>
             </Col>
-            <Col lg={3}>
+            <Col sm={6} lg={4}>
               <FlatButton label="Delete" onClick={this.requestDeleteConfirmation} />
               <Link to={`/post/edit/${post.id}`}>
                 <FlatButton label="Edit" />
@@ -54,9 +54,6 @@ export class PostDetails extends Component {
             </Col>
           </Row>
         </CardActions>
-        <CardText>
-          <h4>Comments:</h4>
-        </CardText>
         <Comments postId={post.id} />
         
         <ConfirmDialog 

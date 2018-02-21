@@ -9,7 +9,9 @@ import {
   UPDATED_COMMENT,
   DETELE_POST,
   ADDED_POST,
-  UPDATED_POST
+  UPDATED_POST,
+  FETCH_POST_ERROR,
+  FETCH_POSTS_START
 } from './actions';
 
 export const onCategoriesFetched = (data) => ({
@@ -20,6 +22,11 @@ export const onCategoriesFetched = (data) => ({
 export const onPostsFetched = (data) => ({
   type: FETCH_POSTS,
   payload: data
+});
+
+export const onPostsFetchStart = () => ({
+  type: FETCH_POSTS_START,
+  payload: {}
 });
 
 export const onPostDeleted = (data) => ({
@@ -40,6 +47,11 @@ export const onPostUpdated = (data) => ({
 export const onPostFetched = (data) => ({
   type: FETCH_POST,
   payload: data
+});
+
+export const onPostFetchError = (postId) => ({
+  type: FETCH_POST_ERROR,
+  payload: { postId }
 });
 
 export const onCommentsFetched = (data) => ({
@@ -94,6 +106,7 @@ export const fetchCategories = () => (dispatch, getState) => {
 
 export const fetchPosts = (categoryId = '') => (dispatch, getState) => {
   const postsRest = categoryId ? `${categoryId}/posts` : `posts`
+  dispatch(onPostsFetchStart());
   request(`/${postsRest}`).then((posts) => {
     dispatch(onPostsFetched(posts));
   });
@@ -101,6 +114,10 @@ export const fetchPosts = (categoryId = '') => (dispatch, getState) => {
 
 export const fetchPost = (postId = '') => (dispatch, getState) => {
   request(`/posts/${postId}`).then((post) => {
+    if (post.error) {
+      dispatch(onPostFetchError(postId));
+      return;
+    }
     dispatch(onPostFetched(post));
   });
 }

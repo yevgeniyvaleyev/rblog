@@ -2,8 +2,29 @@
   float: left;
   display: block;
 }
+
 .categories-list::after {
   clear: both;
   display: block;
   content: '';
+}
+
+.header-container {
+  margin-bottom: 20px;
+}
+
+.no-match img{
+  width: 400px;
+}
+
+.avatar {
+  margin-right: 25px;
+}
+
+.avatar.positive {
+  background: rgb(78, 182, 130) !important;
+}
+
+.avatar.negative {
+  background: rgb(182, 111, 78) !important;
 }

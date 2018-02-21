@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Avatar } from 'material-ui';
 
 export const ScoreAvatar = ({score}) => (
-  <Avatar
-    backgroundColor={score > 0 ? 'green' : score < 0 ? 'red' : 'grey'}>
+  <Avatar 
+    size={30}
+    className={`avatar ${score > 0 ? 'positive' : score < 0 ? 'negative' : ''}`}>
       {score}
   </Avatar>
 )

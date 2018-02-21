@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { fetchComments, deleteComment } from '../actions';
 import { getComments } from '../reducers';
 import { CommentsList } from '../components/comments-list';
@@ -31,12 +32,12 @@ const mapStateToProps = (state) => ({
   comments: getComments(state)
 }); 
 
-Comments = connect(
+Comments = withRouter(connect(
   mapStateToProps,
   { 
     fetchComments,
     deleteComment
   }
-)(Comments);
+)(Comments));
 
 export default Comments;

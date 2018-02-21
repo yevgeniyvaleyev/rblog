@@ -19,9 +19,10 @@ export class CategoriesList extends Component {
       <List className="categories-list">
         {categories.map((category) => (
           <NavLink 
+            key={category.name}
             activeStyle={{ fontWeight: 'bold' }}
-            to={{ pathname: `/category/${category.name}` }}>
-              <ListItem key={category.name}>
+            to={{ pathname: `/${category.name}` }}>
+              <ListItem>
                 {capitalize(category.name)}
               </ListItem>
             </NavLink>

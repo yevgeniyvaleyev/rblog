@@ -31,7 +31,7 @@ export class PostsList extends Component {
   }
 
   render () {
-    const { posts } = this.props;
+    const { posts, categoryName } = this.props;
     
     if (posts.length === 0) {
       return (
@@ -54,10 +54,9 @@ export class PostsList extends Component {
 
         <List className="posts-list">
           {this.sortPosts(posts).map((post) => (
-            <NavLink to={{ pathname: `/post/${post.id}` }}>
+            <NavLink key={post.id} to={{ pathname: `/${categoryName}/${post.id}` }}>
               <ListItem 
-                primaryText={post.title}
-                key={post.id}>
+                primaryText={post.title}>
               </ListItem>
             </NavLink>
           ))}
@@ -68,5 +67,6 @@ export class PostsList extends Component {
 }
 
 PostsList.propTypes = {
-  posts: PropTypes.array.isRequired
+  posts: PropTypes.array.isRequired,
+  categoryName: PropTypes.string.isRequired
 };
