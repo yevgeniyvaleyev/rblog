@@ -40,14 +40,9 @@ class Posts extends Component {
     }
 
     return posts ? (
-      <div>
         <PostsList 
           categoryName={match.params.categoryName}
           posts={posts} />
-        <Route path={`${match.url}/aha`} render={(props) => (
-          <div>######</div>
-        )}/>
-      </div>
     ) : (
       <em>Loading posts...</em>
     )
