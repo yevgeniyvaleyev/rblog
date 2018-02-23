@@ -5,6 +5,7 @@ import {Row, Col} from 'react-flexbox-grid';
 import { Link } from 'react-router-dom';
 import { Card, CardHeader, CardText, CardActions, RaisedButton, FlatButton } from 'material-ui';
 import Comments from '../containers/comments';
+import ManageVotes from '../containers/manage-votes';
 import { ScoreAvatar } from './score-avatar';
 import { ConfirmDialog } from './confirm-dialog';
 
@@ -33,6 +34,11 @@ export class PostDetails extends Component {
         <CardHeader
           avatar={<ScoreAvatar score={post.voteScore} />}
           title={post.author}
+          children={
+            <ManageVotes 
+              type='post' 
+              id={post.id} />
+          }
           subtitle={moment(post.timestamp).format('MMMM Do YYYY, h:mm a')}
         />
         <CardText>
@@ -41,12 +47,12 @@ export class PostDetails extends Component {
         </CardText>
         <CardActions>
           <Row>
-            <Col lg={9}>
-              <Link to={`/post/${post.id}/comment/add`}>
+            <Col sm={6} lg={8}>
+              <Link to={`/${post.category}/${post.id}/comment`}>
                 <RaisedButton primary={true} label="Add comment" />
               </Link>
             </Col>
-            <Col lg={3}>
+            <Col sm={6} lg={4}>
               <FlatButton label="Delete" onClick={this.requestDeleteConfirmation} />
               <Link to={`/post/edit/${post.id}`}>
                 <FlatButton label="Edit" />
@@ -54,9 +60,6 @@ export class PostDetails extends Component {
             </Col>
           </Row>
         </CardActions>
-        <CardText>
-          <h4>Comments:</h4>
-        </CardText>
         <Comments postId={post.id} />
         
         <ConfirmDialog 

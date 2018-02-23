@@ -15,7 +15,8 @@ class ManageComment extends Component {
     };
   }
 
-  addNewComment (newCommentData, postId) {
+  addNewComment (newCommentData) {
+    const { categoryName, postId } = this.props.match.params;
     const data = {
       id: 'a' + Math.random(),
       timestamp: Date.now(),
@@ -26,31 +27,33 @@ class ManageComment extends Component {
       ...data, 
       ...newCommentData
     }).then(() => {
-      this.props.history.push(`/post/${postId}`)
+      this.props.history.push(`/${categoryName}/${postId}`)
     })
   }
 
-  updateComment (commentData, commentId, postId) {
+  updateComment (commentData) {
+    const { categoryName, commentId, postId } = this.props.match.params;
+
     this.props.updateComment({
       ...commentData
     }, commentId).then(() => {
-      this.props.history.push(`/post/${postId}`)
+      this.props.history.push(`/${categoryName}/${postId}`)
     })
   }
 
-  manageComment (filledData) {
-    const { commentId, postId } = this.props.match.params;
-    
+  manageComment (filledData) {  
+    const { commentId } = this.props.match.params;
+  
     commentId
-      ? this.updateComment(filledData, commentId, postId)
-      : this.addNewComment(filledData, postId)
+      ? this.updateComment(filledData)
+      : this.addNewComment(filledData)
   }
 
   cancelEdit () {
-    const { commentId, postId } = this.props.match.params;
+    const { commentId, postId, categoryName } = this.props.match.params;
 
     commentId
-      ? this.props.history.push(`/post/${postId}`)
+      ? this.props.history.push(`/${categoryName}/${postId}`)
       : this.props.history.goBack()
   }
 

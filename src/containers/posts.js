@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { fetchPosts } from '../actions';
-import { getPosts } from '../reducers';
+import { getPosts, getCategories, arePostsLoading } from '../reducers';
 import { PostsList } from '../components/posts-list';
+import NoMatch from '../components/no-match';
 
 class Posts extends Component {
 
@@ -31,17 +32,28 @@ class Posts extends Component {
   }
 
   render() {
-    const { posts } = this.props;
+    const { posts, match, isValidCategory, arePostsLoading } = this.props;
+
+    if (!isValidCategory && !arePostsLoading) {
+      return <NoMatch what="Category" />
+    }
+
     return posts ? (
-      <PostsList posts={posts} />
+        <PostsList
+          posts={posts} />
     ) : (
       <em>Loading posts...</em>
     )
   }
 }
 
-const mapStateToProps = (state) => ({
-  posts: getPosts(state)
+const mapStateToProps = (state, props) => ({
+  posts: getPosts(state),
+  arePostsLoading: arePostsLoading(state),
+  isValidCategory: getCategories(state)
+    .map(data => data.name)
+    .includes(props.match.params.categoryName) || 
+    props.match.params.categoryName === undefined
 }); 
 
 Posts = withRouter(connect(

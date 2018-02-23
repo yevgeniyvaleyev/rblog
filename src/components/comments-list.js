@@ -5,6 +5,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { ScoreAvatar } from './score-avatar';
 import { ConfirmDialog } from './confirm-dialog';
+import ManageVotes from '../containers/manage-votes';
 
 export class CommentsList extends Component {
 
@@ -30,29 +31,46 @@ export class CommentsList extends Component {
     });
   };
 
+  renderHeader (comments) {
+    return (
+      <CardText>
+        <h4>{comments.length} Comment{comments.length !== 1 ? 's' : ''}:</h4>
+      </CardText>
+    )
+  }
+
   render () {
     const { comments } = this.props;
 
     if (comments.length === 0) {
       return (
-        <Card>
-          <CardText>yet no comments...</CardText>
-        </Card>
+        <div>
+          {this.renderHeader(comments)}
+          <Card>
+            <CardText>yet no comments...</CardText>
+          </Card>
+        </div>
       )
     }
     
     return (
         <div className="comments-list">
+          {this.renderHeader(comments)}
           {comments.map((comment) => (
             <Card key={comment.id}>
               <CardHeader
                 avatar={<ScoreAvatar score={comment.voteScore} />}
                 title={comment.author}
+                children={
+                  <ManageVotes 
+                    type='comment' 
+                    id={comment.id} />
+                  }
                 subtitle={moment(comment.timestamp).format('MMMM Do YYYY, h:mm a')}
               />
               <CardText>{comment.body}</CardText>
               <CardActions>
-                <Link to={`/post/${this.props.postId}/comment/edit/${comment.id}`}>
+                <Link to={`${this.props.postId}/comment/${comment.id}`}>
                   <FlatButton label="Edit" />
                 </Link>
                 <FlatButton label="Delete" onClick={this.requestDeleteConfirmation.bind(null, comment.id)} />

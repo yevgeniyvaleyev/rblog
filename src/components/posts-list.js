@@ -54,10 +54,9 @@ export class PostsList extends Component {
 
         <List className="posts-list">
           {this.sortPosts(posts).map((post) => (
-            <NavLink to={{ pathname: `/post/${post.id}` }}>
+            <NavLink key={post.id} to={{ pathname: `/${post.category}/${post.id}` }}>
               <ListItem 
-                primaryText={post.title}
-                key={post.id}>
+                primaryText={post.title}>
               </ListItem>
             </NavLink>
           ))}

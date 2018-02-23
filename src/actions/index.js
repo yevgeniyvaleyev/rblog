@@ -1,71 +1,22 @@
 import {
-  FETCH_CATEGORIES,
-  FETCH_POSTS,
-  FETCH_POST,
-  FETCH_COMMENTS,
-  FETCH_COMMENT,
-  DETELE_COMMENT,
-  ADDED_COMMENT,
-  UPDATED_COMMENT,
-  DETELE_POST,
-  ADDED_POST,
-  UPDATED_POST
-} from './actions';
-
-export const onCategoriesFetched = (data) => ({
-  type: FETCH_CATEGORIES,
-  payload: data
-});
-
-export const onPostsFetched = (data) => ({
-  type: FETCH_POSTS,
-  payload: data
-});
-
-export const onPostDeleted = (data) => ({
-  type: DETELE_POST,
-  payload: data
-});
-
-export const onPostAdded = (data) => ({
-  type: ADDED_POST,
-  payload: data
-});
-
-export const onPostUpdated = (data) => ({
-  type: UPDATED_POST,
-  payload: data
-});
-
-export const onPostFetched = (data) => ({
-  type: FETCH_POST,
-  payload: data
-});
-
-export const onCommentsFetched = (data) => ({
-  type: FETCH_COMMENTS,
-  payload: data
-});
-
-export const onCommentFetched = (data) => ({
-  type: FETCH_COMMENT,
-  payload: data
-});
-
-export const onCommentDeleted = (data) => ({
-  type: DETELE_COMMENT,
-  payload: data
-});
-
-export const onCommentAdded = (data) => ({
-  type: ADDED_COMMENT,
-  payload: data
-});
-
-export const onCommentUpdated = (data) => ({
-  type: UPDATED_COMMENT,
-  payload: data
-});
+  onCategoriesFetched,
+  onCommentAdded,
+  onCommentDeleted,
+  onCommentFetched,
+  onCommentsFetched,
+  onCommentUpdated,
+  onPostAdded,
+  onPostDeleted,
+  onPostFetched,
+  onPostFetchError,
+  onPostsFetched,
+  onPostsFetchStart,
+  onPostUpdated,
+  onVoteRequestStart,
+  onVoteRequestEnd,
+  onVoteCancel,
+  onVoteChanged
+} from './action-creators';
 
 const api = 'http://localhost:3001';
 
@@ -94,6 +45,7 @@ export const fetchCategories = () => (dispatch, getState) => {
 
 export const fetchPosts = (categoryId = '') => (dispatch, getState) => {
   const postsRest = categoryId ? `${categoryId}/posts` : `posts`
+  dispatch(onPostsFetchStart());
   request(`/${postsRest}`).then((posts) => {
     dispatch(onPostsFetched(posts));
   });
@@ -101,6 +53,10 @@ export const fetchPosts = (categoryId = '') => (dispatch, getState) => {
 
 export const fetchPost = (postId = '') => (dispatch, getState) => {
   request(`/posts/${postId}`).then((post) => {
+    if (post.error) {
+      dispatch(onPostFetchError(postId));
+      return;
+    }
     dispatch(onPostFetched(post));
   });
 }
@@ -148,4 +104,22 @@ export const fetchComment = (commentId = '') => (dispatch, getState) => {
       dispatch(onCommentFetched(comment));
     });
   }
+
+const voteFor = (type, isUpvote, id, isUnvote, onUpdateCallback, dispatch) => {
+  dispatch(onVoteRequestStart());  
+  return request(`/${type}/${id}`, 'post', { option: isUpvote ? 'upVote' : 'downVote' })
+    .then((data) => {
+      dispatch(isUnvote ? 
+        onVoteCancel() :
+        onVoteChanged(id, isUpvote));
+      dispatch(onVoteRequestEnd(id, isUpvote, isUnvote));
+      dispatch(onUpdateCallback(data));
+    })
+}
+
+export const voteForPost = (isUpvote, id, isUnvote) => (dispatch, getState) =>
+  voteFor('posts', isUpvote, id, isUnvote, onPostUpdated, dispatch)
+
+export const voteForComment = (isUpvote, id, isUnvote) => (dispatch, getState) =>
+  voteFor('comments', isUpvote, id, isUnvote, onCommentUpdated, dispatch)
 
