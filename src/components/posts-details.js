@@ -5,6 +5,7 @@ import {Row, Col} from 'react-flexbox-grid';
 import { Link } from 'react-router-dom';
 import { Card, CardHeader, CardText, CardActions, RaisedButton, FlatButton } from 'material-ui';
 import Comments from '../containers/comments';
+import ManageVotes from '../containers/manage-votes';
 import { ScoreAvatar } from './score-avatar';
 import { ConfirmDialog } from './confirm-dialog';
 
@@ -26,13 +27,18 @@ export class PostDetails extends Component {
       .then(this.props.goBack)
 
   render () {
-    const { post, match } = this.props;
+    const { post } = this.props;
 
     return (
       <Card>
         <CardHeader
           avatar={<ScoreAvatar score={post.voteScore} />}
           title={post.author}
+          children={
+            <ManageVotes 
+              type='post' 
+              id={post.id} />
+          }
           subtitle={moment(post.timestamp).format('MMMM Do YYYY, h:mm a')}
         />
         <CardText>

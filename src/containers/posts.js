@@ -4,7 +4,6 @@ import { withRouter } from 'react-router';
 import { fetchPosts } from '../actions';
 import { getPosts, getCategories, arePostsLoading } from '../reducers';
 import { PostsList } from '../components/posts-list';
-import { Route } from 'react-router-dom';
 import NoMatch from '../components/no-match';
 
 class Posts extends Component {
@@ -40,8 +39,7 @@ class Posts extends Component {
     }
 
     return posts ? (
-        <PostsList 
-          categoryName={match.params.categoryName}
+        <PostsList
           posts={posts} />
     ) : (
       <em>Loading posts...</em>
@@ -54,7 +52,8 @@ const mapStateToProps = (state, props) => ({
   arePostsLoading: arePostsLoading(state),
   isValidCategory: getCategories(state)
     .map(data => data.name)
-    .includes(props.match.params.categoryName)
+    .includes(props.match.params.categoryName) || 
+    props.match.params.categoryName === undefined
 }); 
 
 Posts = withRouter(connect(

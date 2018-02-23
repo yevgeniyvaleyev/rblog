@@ -5,6 +5,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { ScoreAvatar } from './score-avatar';
 import { ConfirmDialog } from './confirm-dialog';
+import ManageVotes from '../containers/manage-votes';
 
 export class CommentsList extends Component {
 
@@ -60,6 +61,11 @@ export class CommentsList extends Component {
               <CardHeader
                 avatar={<ScoreAvatar score={comment.voteScore} />}
                 title={comment.author}
+                children={
+                  <ManageVotes 
+                    type='comment' 
+                    id={comment.id} />
+                  }
                 subtitle={moment(comment.timestamp).format('MMMM Do YYYY, h:mm a')}
               />
               <CardText>{comment.body}</CardText>

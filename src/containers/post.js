@@ -17,7 +17,7 @@ class Post extends Component {
   }
 
   render() {
-    const { post, deletePost, match, hasError } = this.props;
+    const { post, deletePost, hasError } = this.props;
     
     if (hasError) {
       return <NoMatch what="Post"/>

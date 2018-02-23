@@ -14,7 +14,8 @@
 }
 
 .no-match img{
-  width: 400px;
+  width: 300px;
+  margin: 0 auto;
 }
 
 .avatar {
@@ -27,4 +28,10 @@
 
 .avatar.negative {
   background: rgb(182, 111, 78) !important;
+}
+
+.voter {
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }

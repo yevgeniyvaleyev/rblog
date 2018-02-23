@@ -7,7 +7,7 @@ const validFields = ['title', 'body', 'category'];
 
 const ButtonStyle = {
   marginRight: 24,
-  marginTop: 12,
+  marginTop: 12
 };
 
 export class EditComment extends Component {

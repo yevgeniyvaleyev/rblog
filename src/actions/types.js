@@ -15,3 +15,8 @@ export const FETCH_COMMENT = 'FETCH_COMMENT';
 export const ADDED_COMMENT = 'ADDED_COMMENT';
 export const UPDATED_COMMENT = 'UPDATED_COMMENT';
 export const DETELE_COMMENT = 'DETELE_COMMENT';
+// Score
+export const VOTE_CHANGE_START = 'VOTE_CHANGE_END';
+export const VOTE_CHANGE_END = 'VOTE_CHANGE_END';
+export const VOTE_CANCEL = 'VOTE_CANCEL';
+export const VOTE_CHANGED = 'VOTE_CHANGED';
