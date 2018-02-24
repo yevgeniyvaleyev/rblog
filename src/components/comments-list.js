@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { ScoreAvatar } from './score-avatar';
 import { ConfirmDialog } from './confirm-dialog';
 import ManageVotes from '../containers/manage-votes';
+import { pluralizer } from '../utils/text-formaters'
 
 export class CommentsList extends Component {
 
@@ -34,7 +35,7 @@ export class CommentsList extends Component {
   renderHeader (comments) {
     return (
       <CardText>
-        <h4>{comments.length} Comment{comments.length !== 1 ? 's' : ''}:</h4>
+        <h4>{comments.length} {pluralizer('Comment', comments.length)}:</h4>
       </CardText>
     )
   }

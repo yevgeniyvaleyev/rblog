@@ -25,7 +25,7 @@ class ManagePost extends Component {
       ...data, 
       ...newPostData
     }).then(() => {
-      this.props.history.push(`/category/${newPostData.category}`)
+      this.props.history.push(`/${newPostData.category}`)
     })
   }
 

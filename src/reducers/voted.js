@@ -1,5 +1,4 @@
 import { 
-  VOTE_CHANGE_END,
   VOTE_CANCEL,
   VOTE_CHANGED
  } from '../actions/types';

@@ -12,10 +12,8 @@ export function posts (state = [], action) {
     case FETCH_POST:
       return [action.payload]
     case UPDATED_POST:
-      return [
-        ...state.filter(({id}) => id !== action.payload.id),
-        action.payload
-      ]
+      return state.map((post) => 
+        post.id !== action.payload.id ? post : action.payload)
     case DETELE_POST:
       return [...state.filter(({id}) => id !== action.payload.id)]
     default:
