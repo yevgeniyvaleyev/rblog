@@ -13,8 +13,12 @@
   margin-bottom: 20px;
 }
 
+.no-match {
+  text-align: center
+}
+
 .no-match img{
-  width: 300px;
+  width: 200px;
   margin: 0 auto;
 }
 

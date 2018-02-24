@@ -15,7 +15,8 @@ import {
   onVoteRequestStart,
   onVoteRequestEnd,
   onVoteCancel,
-  onVoteChanged
+  onVoteChanged,
+  onCommentFetchError
 } from './action-creators';
 
 const api = 'http://localhost:3001';
@@ -101,6 +102,10 @@ export const updateComment = (commentData, id) => (dispatch, getState) =>
 
 export const fetchComment = (commentId = '') => (dispatch, getState) => {
     request(`/comments/${commentId}`).then((comment) => {
+      if (comment.error || Object.values(comment).length === 0) {
+        dispatch(onCommentFetchError(commentId));
+        return;
+      }
       dispatch(onCommentFetched(comment));
     });
   }

@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { fetchPosts, deletePost } from '../actions';
-import { getPosts, getCategories, getAllPosts, arePostsLoading } from '../reducers';
+import { getPosts, getCategories, arePostsLoading } from '../reducers';
 import { PostsList } from '../components/posts-list';
 import NoMatch from '../components/no-match';
 
-class Posts extends Component {
+class PostsShortNav extends Component {
 
   state = {
     categoryName: ''
@@ -33,40 +33,26 @@ class Posts extends Component {
 
   render() {
     const { 
-      posts, 
-      isValidCategory, 
+      posts,  
       arePostsLoading, 
-      deletePost
     } = this.props;
 
-    if (!isValidCategory && !arePostsLoading) {
-      return <NoMatch what="Category" />
-    }
-
     return posts ? (
-        <PostsList
-          deletePost={deletePost}
-          posts={posts} />
+        <div>ff</div>
     ) : (
-      <em>Loading posts...</em>
+      <em>Loading post links...</em>
     )
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  posts: !props.match.params.categoryName ? 
-    getAllPosts(state) : 
-    getPosts(state, props.match.params.categoryName),
-  arePostsLoading: arePostsLoading(state),
-  isValidCategory: getCategories(state)
-    .map(data => data.name)
-    .includes(props.match.params.categoryName) || 
-    props.match.params.categoryName === undefined
+const mapStateToProps = (state, {categoryName}) => ({
+  posts: getPosts(state, categoryName),
+  arePostsLoading: arePostsLoading(state)
 }); 
 
-Posts = withRouter(connect(
+PostsShortNav = withRouter(connect(
   mapStateToProps,
-  { fetchPosts, deletePost }
-)(Posts));
+  { fetchPosts }
+)(PostsShortNav));
 
 export default Posts;

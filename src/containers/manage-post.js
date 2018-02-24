@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { addPost, fetchPost, updatePost } from '../actions';
 import { EditPost } from '../components/edit-post';
-import { getCategories, getPost } from '../reducers'
+import { getCategories, getPost, hasError } from '../reducers';
+import NoMatch from '../components/no-match';
 
 class ManagePost extends Component {
 
@@ -70,9 +71,9 @@ class ManagePost extends Component {
 
   shouldRender (props) {
     const { postId } = props.match.params;
-    const { post } = props;
+    const { post, hasError } = props;
 
-    return postId ? !!post : true;
+    return postId ? (!!post || hasError) : true;
   }
 
   shouldComponentUpdate(nextProps) {
@@ -85,7 +86,11 @@ class ManagePost extends Component {
       title, 
       body, 
       category 
-    } = post;
+    } = post; 
+    
+    if (this.props.hasError) {
+      return <NoMatch what="Post"/>
+    }
 
     if (!this.shouldRender(this.props)) {
       return (
@@ -105,9 +110,10 @@ class ManagePost extends Component {
   }
 }
 
-const mapStateToProps = (state, props) => ({
+const mapStateToProps = (state, {match}) => ({
   categories: getCategories(state),
-  post: getPost(state, props.match.params.postId)
+  post: getPost(state, match.params.postId),
+  hasError: hasError(state, match.params.postId)
 }); 
 
 ManagePost = withRouter(connect(

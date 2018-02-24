@@ -5,6 +5,7 @@ import {
   FETCH_COMMENTS,
   FETCH_COMMENT,
   DETELE_COMMENT,
+  FETCH_COMMENT_ERROR,
   ADDED_COMMENT,
   UPDATED_COMMENT,
   DETELE_POST,
@@ -55,7 +56,7 @@ export const onPostFetched = (data) => ({
 
 export const onPostFetchError = (postId) => ({
   type: FETCH_POST_ERROR,
-  payload: { postId }
+  payload: { id: postId }
 });
 
 export const onCommentsFetched = (data) => ({
@@ -81,6 +82,11 @@ export const onCommentAdded = (data) => ({
 export const onCommentUpdated = (data) => ({
   type: UPDATED_COMMENT,
   payload: data
+});
+
+export const onCommentFetchError = (commentId) => ({
+  type: FETCH_COMMENT_ERROR,
+  payload: { id: commentId }
 });
 
 export const onVoteRequestStart = () => ({

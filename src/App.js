@@ -30,12 +30,17 @@ export default class App extends Component {
             <Col md={9} sm={10}>
               <Switch>
                 <Route path='/' exact component={Posts} />
+                <Route path='/not-found' component={NoMatch} />
                 <Route path='/post/add' exact component={ManagePost} />
                 <Route path='/post/edit/:postId' exact component={ManagePost} />
                 <Route path='/:categoryName' exact component={Posts} />
                 <Route path='/:categoryName/:postId'  component={Post} />
-                <Route component={NoMatch} />
               </Switch>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={12}>
+              <Categories />
             </Col>
           </Row>
         </Col>
