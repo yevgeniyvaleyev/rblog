@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { fetchPosts } from '../actions';
-import { getPosts, getCategories, arePostsLoading } from '../reducers';
+import { fetchPosts, deletePost } from '../actions';
+import { getPosts, getCategories, getAllPosts, arePostsLoading } from '../reducers';
 import { PostsList } from '../components/posts-list';
 import NoMatch from '../components/no-match';
 
@@ -32,7 +32,12 @@ class Posts extends Component {
   }
 
   render() {
-    const { posts, match, isValidCategory, arePostsLoading } = this.props;
+    const { 
+      posts, 
+      isValidCategory, 
+      arePostsLoading, 
+      deletePost
+    } = this.props;
 
     if (!isValidCategory && !arePostsLoading) {
       return <NoMatch what="Category" />
@@ -40,6 +45,7 @@ class Posts extends Component {
 
     return posts ? (
         <PostsList
+          deletePost={deletePost}
           posts={posts} />
     ) : (
       <em>Loading posts...</em>
@@ -48,7 +54,9 @@ class Posts extends Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  posts: getPosts(state),
+  posts: !props.match.params.categoryName ? 
+    getAllPosts(state) : 
+    getPosts(state, props.match.params.categoryName),
   arePostsLoading: arePostsLoading(state),
   isValidCategory: getCategories(state)
     .map(data => data.name)
@@ -58,7 +66,7 @@ const mapStateToProps = (state, props) => ({
 
 Posts = withRouter(connect(
   mapStateToProps,
-  { fetchPosts }
+  { fetchPosts, deletePost }
 )(Posts));
 
 export default Posts;

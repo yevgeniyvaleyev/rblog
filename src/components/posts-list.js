@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
-import { SelectField, MenuItem, CardText, Card, List, ListItem } from 'material-ui';
+import { SelectField, MenuItem, CardText, Card } from 'material-ui';
 import { byTimestamp, byVotes } from '../utils/sorters';
+import { PostDetailsShort } from './posts-details-short';
 
 const sorting = {
   votes: 1,
@@ -31,7 +31,7 @@ export class PostsList extends Component {
   }
 
   render () {
-    const { posts } = this.props;
+    const { posts, deletePost } = this.props;
     
     if (posts.length === 0) {
       return (
@@ -52,20 +52,18 @@ export class PostsList extends Component {
             <MenuItem value={3} primaryText="None" />
         </SelectField>
 
-        <List className="posts-list">
-          {this.sortPosts(posts).map((post) => (
-            <NavLink key={post.id} to={{ pathname: `/${post.category}/${post.id}` }}>
-              <ListItem 
-                primaryText={post.title}>
-              </ListItem>
-            </NavLink>
-          ))}
-        </List>
+        {this.sortPosts(posts).map((post) => (
+            <PostDetailsShort
+              deletePost={deletePost}
+              post={post}
+              key={post.id} />
+        ))}
       </div>
     )
   }
 }
 
 PostsList.propTypes = {
+  deletePost: PropTypes.func.isRequired,
   posts: PropTypes.array.isRequired
 };

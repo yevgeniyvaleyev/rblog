@@ -15,7 +15,8 @@ import {
   onVoteRequestStart,
   onVoteRequestEnd,
   onVoteCancel,
-  onVoteChanged
+  onVoteChanged,
+  onCommentFetchError
 } from './action-creators';
 
 const api = 'http://localhost:3001';
@@ -53,7 +54,7 @@ export const fetchPosts = (categoryId = '') => (dispatch, getState) => {
 
 export const fetchPost = (postId = '') => (dispatch, getState) => {
   request(`/posts/${postId}`).then((post) => {
-    if (post.error) {
+    if (post.error || Object.values(post).length === 0) {
       dispatch(onPostFetchError(postId));
       return;
     }
@@ -101,25 +102,32 @@ export const updateComment = (commentData, id) => (dispatch, getState) =>
 
 export const fetchComment = (commentId = '') => (dispatch, getState) => {
     request(`/comments/${commentId}`).then((comment) => {
+      if (comment.error || Object.values(comment).length === 0) {
+        dispatch(onCommentFetchError(commentId));
+        return;
+      }
       dispatch(onCommentFetched(comment));
     });
   }
 
-const voteFor = (type, isUpvote, id, isUnvote, onUpdateCallback, dispatch) => {
+const voteFor = (type, isUpvote, id, isUnvote, isInversiveVote, onUpdateCallback, dispatch) => {
+  const votePartial = request.bind(null, `/${type}/${id}`, 'post', { option: isUpvote ? 'upVote' : 'downVote' });
+  const requestList = isInversiveVote ? [votePartial(), votePartial()]: [votePartial()];
+  
   dispatch(onVoteRequestStart());  
-  return request(`/${type}/${id}`, 'post', { option: isUpvote ? 'upVote' : 'downVote' })
-    .then((data) => {
+  return Promise.all(requestList)
+    .then((values) => {
       dispatch(isUnvote ? 
         onVoteCancel() :
         onVoteChanged(id, isUpvote));
       dispatch(onVoteRequestEnd(id, isUpvote, isUnvote));
-      dispatch(onUpdateCallback(data));
+      dispatch(onUpdateCallback(values.pop()));
     })
 }
 
-export const voteForPost = (isUpvote, id, isUnvote) => (dispatch, getState) =>
-  voteFor('posts', isUpvote, id, isUnvote, onPostUpdated, dispatch)
+export const voteForPost = (isUpvote, id, isUnvote, isInversiveVote) => (dispatch, getState) =>
+  voteFor('posts', isUpvote, id, isUnvote, isInversiveVote, onPostUpdated, dispatch)
 
-export const voteForComment = (isUpvote, id, isUnvote) => (dispatch, getState) =>
-  voteFor('comments', isUpvote, id, isUnvote, onCommentUpdated, dispatch)
+export const voteForComment = (isUpvote, id, isUnvote, isInversiveVote) => (dispatch, getState) =>
+  voteFor('comments', isUpvote, id, isUnvote, isInversiveVote, onCommentUpdated, dispatch)
 

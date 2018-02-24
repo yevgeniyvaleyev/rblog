@@ -48,12 +48,14 @@ class ManageVotes extends Component {
     const isUnchangedVote = this.state.current === resolvedVote;
     const isUnvote = resolvedVote === VOTE_TYPES.UNVOTE;
     const isUp = isUnvote ? !isUpAction : isUpAction
+    const isInversiveVote = Math.abs(this.state.current) === Math.abs(resolvedVote);
+    
     if (isUnchangedVote) {
       return;
     }
     const voter = this.getVoter(type, this.props);
 
-    voter(isUp, id, isUnvote).then(() => {
+    voter(isUp, id, isUnvote, isInversiveVote).then(() => {
       this.setState({
         current: resolvedVote
       });

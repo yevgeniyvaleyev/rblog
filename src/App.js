@@ -10,6 +10,7 @@ import Posts from './containers/posts';
 import Post from './containers/post';
 import ManagePost from './containers/manage-post';
 import NoMatch from './components/no-match';
+import PostsShortNav from './containers/posts-short-navigation';
 
 export default class App extends Component {
   render() {
@@ -30,12 +31,17 @@ export default class App extends Component {
             <Col md={9} sm={10}>
               <Switch>
                 <Route path='/' exact component={Posts} />
+                <Route path='/not-found' component={NoMatch} />
                 <Route path='/post/add' exact component={ManagePost} />
                 <Route path='/post/edit/:postId' exact component={ManagePost} />
                 <Route path='/:categoryName' exact component={Posts} />
                 <Route path='/:categoryName/:postId'  component={Post} />
-                <Route component={NoMatch} />
               </Switch>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={12}>
+              <PostsShortNav />
             </Col>
           </Row>
         </Col>

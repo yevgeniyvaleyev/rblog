@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import { withRouter, Redirect } from 'react-router';
 import { addComment, fetchComment, updateComment } from '../actions';
 import { EditComment } from '../components/edit-comment';
-import { getComment } from '../reducers'
+import { getComment, hasError } from '../reducers';
 
 class ManageComment extends Component {
 
@@ -58,9 +58,9 @@ class ManageComment extends Component {
   }
 
   getComment (id) {
-    const { commentId, fetchComment } = this.props.match.params;
+    const { commentId } = this.props.match.params;
     
-    fetchComment(commentId);
+    this.props.fetchComment(commentId);
   }
 
   componentDidMount () {
@@ -74,9 +74,9 @@ class ManageComment extends Component {
 
   shouldRender (props) {
     const { commentId } = props.match.params;
-    const { comment } = props;
+    const { comment, hasError } = props;
 
-    return commentId ? !!comment : true;
+    return commentId ? !!comment || hasError : true;
   }
 
   shouldComponentUpdate(nextProps) {
@@ -86,6 +86,10 @@ class ManageComment extends Component {
   render() {
     const comment = this.props.comment || {};
     const { body } = comment;
+
+    if (this.props.hasError) {
+      return (<Redirect to='/not-found' />)
+    }
 
     if (!this.shouldRender(this.props)) {
       return (
@@ -102,8 +106,9 @@ class ManageComment extends Component {
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  comment: getComment(state, props.match.params.commentId)
+const mapStateToProps = (state, {match}) => ({
+  comment: getComment(state, match.params.commentId),
+  hasError: hasError(state, match.params.commentId)
 }); 
 
 ManageComment = withRouter(connect(
