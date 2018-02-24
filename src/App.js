@@ -10,6 +10,7 @@ import Posts from './containers/posts';
 import Post from './containers/post';
 import ManagePost from './containers/manage-post';
 import NoMatch from './components/no-match';
+import PostsShortNav from './containers/posts-short-navigation';
 
 export default class App extends Component {
   render() {
@@ -40,7 +41,7 @@ export default class App extends Component {
           </Row>
           <Row>
             <Col md={12}>
-              <Categories />
+              <PostsShortNav />
             </Col>
           </Row>
         </Col>

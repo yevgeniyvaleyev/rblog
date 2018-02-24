@@ -1,5 +1,5 @@
 import { 
-  FETCH_POSTS,
+  FETCH_POSTS_END,
   FETCH_POST,
   DETELE_POST,
   UPDATED_POST
@@ -9,12 +9,14 @@ const updatePost = (state, action) => state.map((post) =>
 
 export function posts (state = [], action) {
   switch (action.type) {
-    case FETCH_POSTS:
-      return [...action.payload]
+    case FETCH_POSTS_END:
+      const stateMap = {};
+      [...state, ...action.payload].forEach(post => stateMap[post.id] = post)
+      return [...Object.values(stateMap)]
     case FETCH_POST:
       const isNew = !state.find(({id}) => id === action.payload.id)
       return isNew ? 
-        [action.payload] : 
+        [...state, action.payload] : 
         updatePost(state, action)
     case UPDATED_POST:
       return updatePost(state, action)

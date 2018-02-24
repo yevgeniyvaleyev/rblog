@@ -1,6 +1,6 @@
 import {
   FETCH_CATEGORIES,
-  FETCH_POSTS,
+  FETCH_POSTS_END,
   FETCH_POST,
   FETCH_COMMENTS,
   FETCH_COMMENT,
@@ -25,7 +25,7 @@ export const onCategoriesFetched = (data) => ({
 });
 
 export const onPostsFetched = (data) => ({
-  type: FETCH_POSTS,
+  type: FETCH_POSTS_END,
   payload: data
 });
 

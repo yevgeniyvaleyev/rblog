@@ -54,6 +54,15 @@
   top: 5px;
   right: 5px;
 }
+.posts-navigation ul {
+  padding: 0;
+  margin: 0;
+}
+.posts-navigation li {
+  float: left;
+  margin-left: 10px;
+  padding-right: 17px;
+}
 
 @media (max-width: 991px) { 
   .short-post-details .sub-controls {

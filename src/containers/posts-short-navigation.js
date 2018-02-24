@@ -1,34 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { fetchPosts, deletePost } from '../actions';
-import { getPosts, getCategories, arePostsLoading } from '../reducers';
-import { PostsList } from '../components/posts-list';
-import NoMatch from '../components/no-match';
+import { fetchPosts } from '../actions';
+import { getPosts, arePostsLoading, getAllPosts } from '../reducers';
+import { NavLink } from 'react-router-dom';
 
 class PostsShortNav extends Component {
 
-  state = {
-    categoryName: ''
-  };
-
-  componentWillReceiveProps (props) {
-    const { categoryName } = props.match.params;
-
-    if (categoryName !== this.state.categoryName) {
-      this.fetchPosts(categoryName);
-    }
-  }
-
   componentDidMount () {
-    this.fetchPosts(this.props.match.params.categoryName);
-  }
-
-  fetchPosts (categoryName) {
-    this.props.fetchPosts(categoryName);
-    this.setState({
-      categoryName
-    });
+    this.props.fetchPosts(this.props.categoryName || '');
   }
 
   render() {
@@ -37,16 +17,32 @@ class PostsShortNav extends Component {
       arePostsLoading, 
     } = this.props;
 
-    return posts ? (
-        <div>ff</div>
-    ) : (
-      <em>Loading post links...</em>
-    )
+    if (arePostsLoading) {
+      return <em>Loading post links...</em>
+    }
+    return (
+      <div className="posts-navigation">
+        <h4>All posts:</h4>
+        <ul>
+          {posts.map((post, index) => (
+            <li>
+              <NavLink 
+                key={post.id} 
+                to={{ pathname: `/${post.category}/${post.id}` }}>
+                  {post.title}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
   }
 }
 
 const mapStateToProps = (state, {categoryName}) => ({
-  posts: getPosts(state, categoryName),
+  posts: !categoryName ? 
+    getAllPosts(state) : 
+    getPosts(state, categoryName),
   arePostsLoading: arePostsLoading(state)
 }); 
 
@@ -55,4 +51,4 @@ PostsShortNav = withRouter(connect(
   { fetchPosts }
 )(PostsShortNav));
 
-export default Posts;
+export default PostsShortNav;

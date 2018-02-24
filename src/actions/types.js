@@ -1,7 +1,7 @@
 // Categories
 export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 // Posts
-export const FETCH_POSTS = 'FETCH_POSTS';
+export const FETCH_POSTS_END = 'FETCH_POSTS_END';
 export const FETCH_POST = 'FETCH_POST';
 export const DETELE_POST = 'DETELE_POST';
 export const ADDED_POST = 'ADDED_POST';
