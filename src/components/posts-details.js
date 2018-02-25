@@ -22,9 +22,7 @@ export class PostDetails extends Component {
   };
 
   removePost = () => 
-    this.props
-      .deletePost(this.props.post.id)
-      .then(this.props.goBack)
+    this.props.deletePost(this.props.post.id)
 
   render () {
     const { post } = this.props;
