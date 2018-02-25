@@ -40,6 +40,30 @@ export class CommentsList extends Component {
     )
   }
 
+  renderComment (comment) {
+    return (
+      <Card key={comment.id}>
+        <CardHeader
+          avatar={<ScoreAvatar score={comment.voteScore} />}
+          title={comment.author}
+          children={
+            <ManageVotes 
+              type='comment' 
+              id={comment.id} />
+            }
+          subtitle={moment(comment.timestamp).format('MMMM Do YYYY, h:mm a')}
+        />
+        <CardText>{comment.body}</CardText>
+        <CardActions>
+          <Link to={`${this.props.postId}/comment/${comment.id}`}>
+            <FlatButton label="Edit" />
+          </Link>
+          <FlatButton label="Delete" onClick={this.requestDeleteConfirmation.bind(null, comment.id)} />
+        </CardActions>
+      </Card>
+    )
+  }
+
   render () {
     const { comments } = this.props;
 
@@ -57,27 +81,7 @@ export class CommentsList extends Component {
     return (
         <div className="comments-list">
           {this.renderHeader(comments)}
-          {comments.map((comment) => (
-            <Card key={comment.id}>
-              <CardHeader
-                avatar={<ScoreAvatar score={comment.voteScore} />}
-                title={comment.author}
-                children={
-                  <ManageVotes 
-                    type='comment' 
-                    id={comment.id} />
-                  }
-                subtitle={moment(comment.timestamp).format('MMMM Do YYYY, h:mm a')}
-              />
-              <CardText>{comment.body}</CardText>
-              <CardActions>
-                <Link to={`${this.props.postId}/comment/${comment.id}`}>
-                  <FlatButton label="Edit" />
-                </Link>
-                <FlatButton label="Delete" onClick={this.requestDeleteConfirmation.bind(null, comment.id)} />
-              </CardActions>
-            </Card>
-          ))}
+          {comments.map(this.renderComment.bind(this))}
           <ConfirmDialog 
             activate={this.state.activateDeleteConfirm}
             message="Delete comment?"

@@ -22,9 +22,7 @@ export class PostDetails extends Component {
   };
 
   removePost = () => 
-    this.props
-      .deletePost(this.props.post.id)
-      .then(this.props.goBack)
+    this.props.deletePost(this.props.post.id)
 
   render () {
     const { post } = this.props;
@@ -74,6 +72,5 @@ export class PostDetails extends Component {
 
 PostDetails.propTypes = {
   post: PropTypes.object.isRequired,
-  deletePost: PropTypes.func.isRequired,
-  goBack: PropTypes.func.isRequired
+  deletePost: PropTypes.func.isRequired
 };

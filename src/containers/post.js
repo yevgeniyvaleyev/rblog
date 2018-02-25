@@ -16,8 +16,16 @@ class Post extends Component {
     this.props.fetchPost(postId);
   }
 
+  deletePost = (id) => {
+    const {history, post, deletePost} = this.props;
+    deletePost(id).then(() => {
+      history.push(`/${post.category}`);
+    })
+  }
+
+
   render() {
-    const { post, deletePost, hasError } = this.props;
+    const { post, hasError } = this.props;
     
     if (hasError) {
       return <NoMatch what="Post"/>
@@ -29,8 +37,7 @@ class Post extends Component {
         <Route path={`/:categoryName/:postId/comment/:commentId`} component={ManageComment} />
         
         <PostDetails 
-          deletePost={deletePost}
-          goBack={this.props.history.goBack}
+          deletePost={this.deletePost}
           post={post} />
       </div>
     ) : (
