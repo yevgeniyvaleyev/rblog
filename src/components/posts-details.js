@@ -72,6 +72,5 @@ export class PostDetails extends Component {
 
 PostDetails.propTypes = {
   post: PropTypes.object.isRequired,
-  deletePost: PropTypes.func.isRequired,
-  goBack: PropTypes.func.isRequired
+  deletePost: PropTypes.func.isRequired
 };

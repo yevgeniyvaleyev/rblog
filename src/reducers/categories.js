@@ -3,10 +3,8 @@ import {
  } from '../actions/types';
 
 export function categories (state = [], action) {
-  switch (action.type) {
-    case FETCH_CATEGORIES:
-      return action.payload
-    default:
-      return state;
+  if (action.type === FETCH_CATEGORIES) {
+    return action.payload
   }
+  return state;
 }

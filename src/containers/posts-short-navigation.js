@@ -25,7 +25,7 @@ class PostsShortNav extends Component {
         <h4>All posts:</h4>
         <ul>
           {posts.map((post, index) => (
-            <li>
+            <li key={post.id}>
               <NavLink 
                 key={post.id} 
                 to={{ pathname: `/${post.category}/${post.id}` }}>
